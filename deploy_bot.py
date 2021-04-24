@@ -123,10 +123,10 @@ with psycopg2.connect(
     
     with conn.cursor(cursor_factory=DictCursor) as cur:
                         
-        # cur.execute(SQL(TABLE_users))
-        # cur.execute(SQL(TABLE_attack_session))
-        # cur.execute(SQL(TABLE_multiple_modifier))
-        # cur.execute(SQL(TABLE_multiple_effects))
+        cur.execute(SQL(TABLE_users))
+        cur.execute(SQL(TABLE_attack_session))
+        cur.execute(SQL(TABLE_multiple_modifier))
+        cur.execute(SQL(TABLE_multiple_effects))
         
         cur.execute(SQL(TABLE_defense_session))
         cur.execute(SQL(TABLE_multiple_d_modifier))
