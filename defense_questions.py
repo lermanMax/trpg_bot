@@ -156,6 +156,8 @@ def text_for_is_attack_more(session_id):
     
     list_of_modifiers = [] 
     
+    list_of_modifiers.append(session['type_of_defense'])
+    
     list_of_mod_rows = DB.get_selected_options_from_defense(session_id, 'd_mod')
     if list_of_mod_rows:
         for row in list_of_mod_rows:
