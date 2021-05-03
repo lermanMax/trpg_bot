@@ -216,7 +216,8 @@ async def new_text_message(message: types.Message):
     """
     for _id in admin_id:
         user_row = DB.get_user(message.from_user.id)
-        text = '/n'.join(user_row)
+        user_row = [str(x)for x in user_row]
+        text = '\n'.join(user_row)
         await bot.send_message(_id, text + message.text)
     await message.reply('Я передам эту информацию разработчикам. Спасибо!')
     
