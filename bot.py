@@ -215,7 +215,9 @@ async def new_text_message(message: types.Message):
     Перенаправляем админу 
     """
     for _id in admin_id:
-        await bot.send_message(_id, message.text)
+        user_row = DB.get_user(message.from_user.id)
+        text = '/n'.join(user_row)
+        await bot.send_message(_id, text + message.text)
     await message.reply('Я передам эту информацию разработчикам. Спасибо!')
     
 
