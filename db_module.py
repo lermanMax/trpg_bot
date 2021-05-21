@@ -37,15 +37,21 @@ class DB_module:
         return 'user added'
     
     
-    def get_user(self, user_id):
+    def get_user(self, user_id = None):
         conn = psycopg2.connect(**self.DB_dict)
         cur = conn.cursor(cursor_factory = DictCursor)
-                
-        select_users = "select * from users where id = %s;"
-        data = (user_id,)
         
-        cur.execute(select_users, data)
-        result = cur.fetchone()
+        if user_id:
+            select_users = "select * from users where id = %s;"
+            data = (user_id,)
+            cur.execute(select_users, data)
+            result = cur.fetchone()
+        else:
+            select_users = "select * from users;"
+            data = (user_id,)
+            cur.execute(select_users, data)
+            result = cur.fetchall()
+        
         conn.commit()
         cur.close()
         conn.close()

@@ -175,10 +175,11 @@ class Attack_question:
     def next_step(self, session_id, answer):
         '''
         Главный метод. 
+        
         Сохраняет ответы.
         Говорит что делать дальше:
-            1. Переходить к следующему вопросу
-            2. Сохронить ответ и выдать этот-же вопрос
+            + Переходить к следующему вопросу
+            + Сохронить ответ и выдать этот-же вопрос
         '''
         if self.keyboard_type == Attack_question.one_answer:
             self.save_option(session_id, answer)

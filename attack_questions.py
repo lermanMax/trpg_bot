@@ -3,105 +3,130 @@ from poll_module import Attack_question, get_text_from, DB
 
 '''Attack '''
 
-type_of_attack = Attack_question('type_of_attack', 
-                                 get_text_from('./questions_text/type_of_attack.txt'))
+type_of_attack = Attack_question(
+    'type_of_attack', 
+    get_text_from('./questions_text/type_of_attack.txt'))
 
 
-melee_weapon = Attack_question('melee_weapon', 
-                                get_text_from('./questions_text/melee_weapon.txt'), 
-                                keyboard_type = Attack_question.one_answer, 
-                                options_dict = None, 
-                                column_name = None, 
-                                required_value = None,
-                                next_question=None)
-melee_weapon.add_options_dict({'Меч': None,
-                               'Легкий клинок': None,
-                               'Древковое оружие': None,
-                               'Щит': None,
-                               'Рука/Нога': None})
+melee_weapon = Attack_question(
+    'melee_weapon', 
+    get_text_from('./questions_text/melee_weapon.txt'), 
+    keyboard_type = Attack_question.one_answer, 
+    options_dict = None, 
+    column_name = None, 
+    required_value = None,
+    next_question=None,
+    field_name = 'weapon')
+melee_weapon.add_options_dict(
+    {'Меч': None,
+     'Легкий клинок': None,
+     'Древковое оружие': None,
+     'Щит': None,
+     'Рука/Нога': None})
 
 
-ranged_weapon = Attack_question('ranged_weapon', 
-                                get_text_from('./questions_text/ranged_weapon.txt'))
+ranged_weapon = Attack_question(
+    'ranged_weapon', 
+    get_text_from('./questions_text/ranged_weapon.txt'),
+    field_name = 'weapon')
+
+magic_weapon = Attack_question(
+    'magic_weapon', 
+    get_text_from('./questions_text/magic_weapon.txt'),
+    field_name = 'weapon')
 
 
-
-fast_or_hard_1 = Attack_question('fast_or_hard_1', 
-                                 get_text_from('./questions_text/fast_or_hard.txt'))
-fast_or_hard_1.add_options_dict({'+0 Быстро [2 атаки]': None,
-                                 '-3 Сильно': None})
+fast_or_hard_1 = Attack_question(
+    'fast_or_hard_1', 
+    get_text_from('./questions_text/fast_or_hard.txt'),
+    field_name = 'fast_or_hard')
+fast_or_hard_1.add_options_dict(
+    {'+0 Быстро [2 атаки]': None,
+     '-3 Сильно': None})
   
-fast_or_hard_2 = Attack_question('fast_or_hard_2', 
-                                get_text_from('./questions_text/fast_or_hard.txt'))
-fast_or_hard_2.add_options_dict({'+0 Обычно [1 атака]': None,
-                                '-3 Сильно': None})
+fast_or_hard_2 = Attack_question(
+    'fast_or_hard_2', 
+    get_text_from('./questions_text/fast_or_hard.txt'),
+    field_name = 'fast_or_hard')
+fast_or_hard_2.add_options_dict(
+    {'+0 Обычно [1 атака]': None,
+     '-3 Сильно': None})
 
-fast_or_hard_3 = Attack_question('fast_or_hard_3', 
-                                get_text_from('./questions_text/fast_or_hard.txt'))
-fast_or_hard_3.add_options_dict({'+0 Обычно [1 атака]': None})
-
-
-place_penalty = Attack_question('place_penalty', 
-                                get_text_from('./questions_text/place_penalty.txt'))
-place_penalty.add_options_dict({'-6 Голова': None,
-                                '-1 Туловище': None,
-                                '-3 Рука/Конечность': None,
-                                '-2 Нога/Крыло/Хвост': None,
-                                '+0 Случайное место': None})
+fast_or_hard_3 = Attack_question(
+    'fast_or_hard_3', 
+    get_text_from('./questions_text/fast_or_hard.txt'),
+    field_name = 'fast_or_hard')
+fast_or_hard_3.add_options_dict(
+    {'+0 Обычно [1 атака]': None})
 
 
-distance = Attack_question('distance', 
-                           get_text_from('./questions_text/distance.txt'),
-                           column_name = 'type_of_attack', 
-                           required_value = 'Дистанционная')
-distance.add_options_dict({'+5 В упор [<0.5 метра]': None,
-                           '+0 Близкая [1/4 дистанции]': None,
-                           '-2 Средняя [1/2 дистанции]': None,
-                           '-4 Дальняя [1х дистанция]': None,
-                           '-6 Экстрем. [2х дистанция]': None})
+another_magic = Attack_question(
+    'another_magic', 
+    get_text_from('./questions_text/another_magic.txt'))
+
+
+place_penalty = Attack_question(
+    'place_penalty', 
+    get_text_from('./questions_text/place_penalty.txt'))
+place_penalty.add_options_dict(
+    {'-6 Голова': None,
+     '-1 Туловище': None,
+     '-3 Рука/Конечность': None,
+     '-2 Нога/Крыло/Хвост': None,
+     '+0 Случайное место': None})
+
+
+distance = Attack_question(
+    'distance', 
+    get_text_from('./questions_text/distance.txt'),
+    column_name = 'type_of_attack', 
+    required_value = 'Дистанционная')
+distance.add_options_dict(
+    {'+5 В упор [0.5 метра]': None,
+     '+0 Близкая [1/4 дистанции]': None,
+     '-2 Средняя [1/2 дистанции]': None,
+     '-4 Дальняя [1х дистанция]': None,
+     '-6 Экстрем. [2х дистанция]': None})
+
+
+mod = Attack_question(
+    'mod', 
+    get_text_from('./questions_text/mod.txt'), 
+    keyboard_type = Attack_question.multiple_answer)
+mod.add_options_dict(
+    {'+3  Я вне конуса зрения Ц':None,
+     '-3  Ц вне моего конуса зрения':None,
+     '+4  Ц обездвижена':None,
+     '-2  Ц уклоняется':None,
+     '-3  Ц движется, ее Реа>10':None,
+     '-3  Быстрое выхватывание':None,
+     '+5  Засада':None,
+     '-5  Рикошет':None,
+     '-2  Я сбит(а) с ног':None,
+     '-3  Ослеплен(а) светом/пылью':None,
+     '-2  Темнота':None,
+     '+2  Ц на контрастном фоне':None,
+     '-3  Это доп. действие':None,
+     '+1  Другой модификатор':None,
+     '+2  Другой модификатор':None,
+     '+3  Другой модификатор':None,
+     '-1  Другой модификатор':None,
+     '-2  Другой модификатор':None
+     })
 
 
 
-mod = Attack_question('mod', 
-                      get_text_from('./questions_text/mod.txt'), 
-                      keyboard_type = Attack_question.multiple_answer)
-mod.add_options_dict({'+3  Я вне конуса зрения Ц':None,
-                      '-3 Ц вне моего конуса зрения':None,
-                      '+4  Ц обездвижена':None,
-                      '-2  Ц уклоняется':None,
-                      '-3  Ц движется, ее Реа>10':None,
-                      '-3  Быстрое выхватывание':None,
-                      '+5  Засада':None,
-                      '-5  Рикошет':None,
-                      '-2  Я сбит(а) с ног':None,
-                      '-3  Ослеплен(а) светом/пылью':None,
-                      '-2  Темнота':None,
-                      '+2  Ц на контрастном фоне':None,
-                      '-3 Это доп. действие':None,
-                      '+1  Другой модификатор':None,
-                      '+2  Другой модификатор':None,
-                      '+3  Другой модификатор':None
-                      })
+weapon_accuracy = Attack_question(
+    'weapon_accuracy', 
+    get_text_from('./questions_text/weapon_accuracy.txt'))
+weapon_accuracy.add_options_dict(
+    {'+5': None,
+     '+4': None,
+     '+3': None,
+     '+2': None,
+     '+1': None,
+     '+0': None})
 
-
-
-weapon_accuracy = Attack_question('weapon_accuracy', 
-                                  get_text_from('./questions_text/weapon_accuracy.txt'))
-weapon_accuracy.add_options_dict({'+5': None,
-                                  '+4': None,
-                                  '+3': None,
-                                  '+2': None,
-                                  '+1': None,
-                                  '+0': None})
-
-
-effects = Attack_question('effects', 
-                          get_text_from('./questions_text/effects.txt'), 
-                          keyboard_type = Attack_question.multiple_answer)
-effects.add_options_dict({'-1 Замораживание':None,
-                          '-2 Ошеломление':None,
-                          '-2 Опьянение':None,
-                          '-3 Слепота':None})
 
 
 def text_for_attack_more(session_id):
@@ -115,24 +140,32 @@ def text_for_attack_more(session_id):
                   'Рука/Нога': 'Борьба',
                   'Метательное': 'Атлетика',
                   'Лук': 'Стрельба из лука',
-                  'Арбалет': 'Стрельба из арбалета'}
+                  'Арбалет': 'Стрельба из арбалета',
+                  'Наносит урон': 'Cотворение заклинаний'}
     
-    if session['type_of_attack'] == 'Дистанционная':
-        parameter = 'Ловкость'
-        weapon = session['ranged_weapon']
-        skill = skill_dict[weapon]
-    else:
+    if session['type_of_attack'] == 'Ближний бой':
         parameter = 'Реакция'
-        weapon = session['melee_weapon']
-        skill = skill_dict[weapon]
+    elif session['type_of_attack'] == 'Магия':
+        parameter = 'Воля'
+    else:
+        parameter = 'Ловкость'
+        
+    weapon = session['weapon']
+    skill = skill_dict[weapon]
     
-    accuracy = session['weapon_accuracy']
+    if session['type_of_attack'] == 'Магия':
+        attack = 'ℹ Вы используете: Магическую атаку'
+        weapon_accuracy = ''
+        modifier = 0
+    else: 
+        attack = f'ℹ Ваше оружие атаки: {weapon}'
+        accuracy = session['weapon_accuracy']
+        weapon_accuracy = f'{accuracy} Точность оружия\n'
+        modifier = int(accuracy)
     
-    modifier = int(accuracy)
     list_of_modifiers = []
     
-    if (session['fast_or_hard_1'] == '-3 Сильно' 
-        or session['fast_or_hard_2'] == '-3 Сильно'):
+    if (session['fast_or_hard'] == '-3 Сильно'):
         list_of_modifiers.append('-3 Сильная атака')
     
     list_of_modifiers.append(session['place_penalty'])
@@ -144,11 +177,6 @@ def text_for_attack_more(session_id):
         for row in list_of_mod_rows:
             list_of_modifiers.append(row['value'])
     
-    list_of_effects_rows = DB.get_selected_options_from_attack(session_id, 'effects')
-    if list_of_effects_rows:
-        for row in list_of_effects_rows:
-            list_of_modifiers.append(row['value'])
-    
     modifier_names = '\n'.join(list_of_modifiers)
     
     for item in list_of_modifiers:
@@ -158,21 +186,20 @@ def text_for_attack_more(session_id):
     if modifier >= 0: plus = '+'
     else: plus = '' 
     text = f'''
-ℹ Ваше оружие атаки: {weapon}
+{attack}
     
 ℹ Все модификаторы:
-{accuracy} Точность оружия  
-{modifier_names}
-ℹ Сумма модификаторов = {plus}{modifier}
+{weapon_accuracy}{modifier_names}
+ℹ Сумма модификаторов: {plus}{modifier}
 
-➡ Рассчитайте атаку по формуле:
+➡ <b>Рассчитайте атаку по формуле:</b>
 Бросок D10 
 + {parameter} 
 + Навык: {skill}
 {plus}{modifier}
 
 💬 Назовите значение вашей атаки противнику 
-➡ Ваша атака больше защиты противника?
+➡ <b>Ваша атака больше защиты противника?</b> Если да, то на сколько?
     '''
     return text
 
@@ -180,19 +207,52 @@ def text_for_attack_more(session_id):
 is_attack_more = Attack_question('is_attack_more', 
                                   text = text_for_attack_more)
 
+is_magic_more = Attack_question(
+    'is_magic_more', 
+    get_text_from('./questions_text/is_magic_more.txt'),
+    field_name = 'is_attack_more')
+
+magic_failed = Attack_question(
+    'magic_failed', 
+    get_text_from('./questions_text/magic_failed.txt'))
+
+magic_soccess = Attack_question(
+    'magic_soccess', 
+    get_text_from('./questions_text/magic_soccess.txt'))
+
 attack_failed = Attack_question(
     'attack_failed', 
     get_text_from('./questions_text/attack_failed.txt'))
 
-body = Attack_question('body',
-                       get_text_from('./questions_text/body.txt'))
-body.add_options_dict({'-4 [Тел. 1-2]': None,
-                       '-2 [Тел. 3-4]': None,
-                       '+0 [Тел. 5-6]': None,
-                       '+2 [Тел. 7-8]': None,
-                       '+4 [Тел. 9-10]': None,
-                       '+6 [Тел. 11-12]': None,
-                       '+8 [Тел. 13-20]': None})
+body_1 = Attack_question(
+    'body_1',
+    get_text_from('./questions_text/body.txt'),
+    column_name = 'type_of_attack', 
+    required_value = 'Ближний бой',
+    field_name = 'body')
+body_1.add_options_dict(
+    {'-4 [Тел. 1-2]': None,
+     '-2 [Тел. 3-4]': None,
+     '+0 [Тел. 5-6]': None,
+     '+2 [Тел. 7-8]': None,
+     '+4 [Тел. 9-10]': None,
+     '+6 [Тел. 11-12]': None,
+     '+8 [Тел. 13-20]': None})
+
+body_2 = Attack_question(
+    'body_2',
+    get_text_from('./questions_text/body.txt'),
+    column_name = 'weapon', 
+    required_value = 'Метательное',
+    field_name = 'body')
+body_2.add_options_dict(
+    {'-4 [Тел. 1-2]': None,
+     '-2 [Тел. 3-4]': None,
+     '+0 [Тел. 5-6]': None,
+     '+2 [Тел. 7-8]': None,
+     '+4 [Тел. 9-10]': None,
+     '+6 [Тел. 11-12]': None,
+     '+8 [Тел. 13-20]': None})
 
 
 weapon_damage = Attack_question(
@@ -228,16 +288,20 @@ place_monster.add_options_dict({'1 Голова': None,
 def text_for_damage_more(session_id):
     session = DB.get_attack_session(session_id)
     
-    additional_damage_dict = {'Да': 0,
-                              'Да, на 7-9':3,
-                              'Да, на 10-12':5,
-                              'Да, на 13-14':8,
-                              'Да, на 15 или больше':10}
+    additional_damage_dict = {
+        'Да': 0,
+        'Да, на 7-9':3,
+        'Да, на 10-12':5,
+        'Да, на 13-14':8,
+        'Да, на 15 или больше':10}
     
-    if session['type_of_attack'] == 'Дистанционная':
-        weapon = session['ranged_weapon']
-    else:
-        weapon = session['melee_weapon']
+    
+    if session['type_of_attack'] == 'Магия':
+        attack = 'ℹ Вы используете: Магическую атаку'
+    else: 
+        weapon = session['weapon']
+        attack = f'ℹ Ваше оружие атаки: {weapon}'
+        
     
     if session['place_penalty'] == '+0 Случайное место':
         if session['place_humanoid']:
@@ -252,15 +316,15 @@ def text_for_damage_more(session_id):
     weapon_damage = session['weapon_damage']
     result_damage = weapon_damage
     
-    if session['fast_or_hard_1'] != None:
+    if (session['type_of_attack'] == 'Ближний бой'
+        or session['weapon'] == 'Метательное'):
         body_damage = session['body'].split(' ')[0]
         result_damage += int(body_damage)
         plus_body = f'Добавить телосложение: {body_damage}\n' 
     else:
         plus_body = ''
     
-    if (session['fast_or_hard_1'] == '-3 Сильно' 
-        or session['fast_or_hard_2'] == '-3 Сильно'):
+    if (session['fast_or_hard'] == '-3 Сильно'):
         result_damage = result_damage * 2
         x_strong_attack = 'Сильная атака: Урон х2 \n'
     else:
@@ -278,22 +342,23 @@ def text_for_damage_more(session_id):
         comment_result = ''
     
     text = f'''
-ℹ Ваше оружие атаки: {weapon}
+{attack}
 ℹ Место попадания: {place}
 
 ℹ Расчет урона:
 Выпавший на кубах урон оружия: {weapon_damage}
 {plus_body}{x_strong_attack}{plus_additional_damage}    
-ℹ Итоговый урон: {result_damage} {comment_result}
+ℹ <b>Итоговый урон:</b> {result_damage} {comment_result}
 
 💬 Назовите место попадания, урон и тип урона противнику {comment_additional_damage}
-➡ Урон преодолел броню?
+➡ <b>Урон преодолел броню?</b>
     '''
     
     return text
 
-is_damage_more = Attack_question('is_damage_more', 
-                                text = text_for_damage_more)
+is_damage_more = Attack_question(
+    'is_damage_more', 
+    text = text_for_damage_more)
 
 damage_failed = Attack_question(
     'damage_failed', 
@@ -305,35 +370,39 @@ damage_hit = Attack_question(
     keyboard_type = Attack_question.numerical_answer)
 
  
-resistance_or = Attack_question('resistance_or', 
-                                get_text_from('./questions_text/resistance_or.txt'))
-resistance_or.add_options_dict({'х1/2 Сопротивление': None,
-                                'х2 Восприимчивость': None,
-                                'Нет': None})
+resistance_or = Attack_question(
+    'resistance_or', 
+    get_text_from('./questions_text/resistance_or.txt'))
+resistance_or.add_options_dict(
+    {'х1/2 Сопротивление': None,
+     'х2 Восприимчивость': None,
+     'Нет': None})
 
 
 def text_for_damage_hurt(session_id):
     session = DB.get_attack_session(session_id)
     
-    modifier_place_dict = {'1 Голова': 3,
-                           '2-4 Туловище': 1,
-                           '5 Правая рука': 0.5,
-                           '6 Левая рука': 0.5,
-                           '7-8 Правая нога ': 0.5,
-                           '9-10 Левая нога': 0.5,
-                           '1 Голова': 3,
-                           '2-5 Туловище': 1,
-                           '6-7 Правая конечность': 0.5,
-                           '8-9 Левая конечность': 0.5,
-                           '10 Хвост/крыло': 0.5,
-                           '-6 Голова': 3,
-                           '-1 Туловище': 1,
-                           '-3 Рука/Конечность': 0.5,
-                           '-2 Нога/Крыло/Хвост': 0.5}
+    modifier_place_dict = {
+        '1 Голова': 3,
+        '2-4 Туловище': 1,
+        '5 Правая рука': 0.5,
+        '6 Левая рука': 0.5,
+        '7-8 Правая нога ': 0.5,
+        '9-10 Левая нога': 0.5,
+        '1 Голова': 3,
+        '2-5 Туловище': 1,
+        '6-7 Правая конечность': 0.5,
+        '8-9 Левая конечность': 0.5,
+        '10 Хвост/крыло': 0.5,
+        '-6 Голова': 3,
+        '-1 Туловище': 1,
+        '-3 Рука/Конечность': 0.5,
+        '-2 Нога/Крыло/Хвост': 0.5}
     
-    resistance_or_dict = {'х1/2 Сопротивление': 0.5,
-                          'х2 Восприимчивость': 2,
-                          'Нет': 1}
+    resistance_or_dict = {
+        'х1/2 Сопротивление': 0.5,
+        'х2 Восприимчивость': 2,
+        'Нет': 1}
     
     damage = session['damage_hit']
     
@@ -366,7 +435,7 @@ def text_for_damage_hurt(session_id):
 Место попадания: {place}
 Модификатор места: x{modifier_place}
 {text_modifier_resistance_or} 
-ℹ Нанесенный урон противнику: {result_damage}
+ℹ <b>Нанесенный урон противнику:</b> {result_damage}
 
 💬 Назовите нанесенный урон противнику
 
@@ -386,8 +455,9 @@ damage_hurt = Attack_question(
     text = text_for_damage_hurt)
 
 
-critical_injury = Attack_question('critical_injury', 
-                                get_text_from('./questions_text/critical_injury.txt'))
+critical_injury = Attack_question(
+    'critical_injury', 
+    get_text_from('./questions_text/critical_injury.txt'))
 critical_injury.add_options_dict(
     {'12': None,
      '11': None,
@@ -423,7 +493,7 @@ def text_for_critical_description(session_id):
 ℹ Критический уровень: {critical_level}
 
 ℹ Результат броска 2d6: {critical_injury_roll}
-ℹ Эффект: {critical_effect_name}
+ℹ <b>Эффект:</b> {critical_effect_name}
 {critical_effect}
 
 ℹ После стабилизации:
@@ -434,7 +504,7 @@ def text_for_critical_description(session_id):
     
 💬 Назовите описание противнику (или перешлите это сообщение)
 
-[раздел в разработке. опиание критических ранений ищите в книге на стр.158]
+[раздел в разработке. опиcание критических ранений ищите в книге на стр.158]
     '''
     return text
 
@@ -444,40 +514,50 @@ critical_description = Attack_question(
     text = text_for_critical_description)
 
 
-
 '''Attack tree----------------------------------------------------------------------------'''
 
-type_of_attack.add_options_dict({'Ближний бой':melee_weapon, 
-                                 'Дистанционная':ranged_weapon})
+type_of_attack.add_options_dict(
+    {'Ближний бой':melee_weapon, 
+     'Дистанционная':ranged_weapon,
+     'Магия': magic_weapon})
 melee_weapon.next_question = fast_or_hard_1
 
-ranged_weapon.add_options_dict({'Метательное': fast_or_hard_1,
-                                'Лук': fast_or_hard_2,
-                                'Арбалет': fast_or_hard_3})
+ranged_weapon.add_options_dict(
+    {'Метательное': fast_or_hard_1,
+     'Лук': fast_or_hard_2,
+     'Арбалет': fast_or_hard_3})
 
-fast_or_hard_1.next_question = place_penalty
-fast_or_hard_2.next_question = place_penalty
-fast_or_hard_3.next_question = place_penalty
+magic_weapon.add_options_dict(
+    {'Наносит урон': place_penalty,
+     'Накладывает эффект': is_magic_more,
+     'Другое': another_magic})
+
+fast_or_hard_1.next_question = weapon_accuracy
+fast_or_hard_2.next_question = weapon_accuracy
+fast_or_hard_3.next_question = weapon_accuracy
+
+weapon_accuracy.next_question = place_penalty
 
 place_penalty.next_question = distance
 
 distance.next_question = mod
 
-mod.next_question = weapon_accuracy
+mod.next_question = is_attack_more
 
-weapon_accuracy.next_question = effects
+is_attack_more.add_options_dict(
+    {'Нет': attack_failed,
+     'Да': body_1,
+     'Да, на 7-9': body_1,
+     'Да, на 10-12': body_1,
+     'Да, на 13-14': body_1,
+     'Да, на 15 или больше': body_1})
 
-effects.next_question = is_attack_more
+is_magic_more.add_options_dict(
+    {'Нет': magic_failed,
+     'Да': magic_soccess })
 
-is_attack_more.add_options_dict({'Нет': attack_failed,
-                                 'Да': body,
-                                 'Да, на 7-9': body,
-                                 'Да, на 10-12': body,
-                                 'Да, на 13-14': body,
-                                 'Да, на 15 или больше': body})
-
-
-body.next_question = weapon_damage
+body_1.next_question = body_2
+body_2.next_question = weapon_damage
 
 weapon_damage.next_question = enemy_type
 

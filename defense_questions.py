@@ -1,36 +1,10 @@
 from poll_module import Defense_question, get_text_from, DB
 
 
-first_defense = Defense_question(
-    'first_d', 
-    get_text_from('./questions_text/first_defense.txt'),
-    field_name = 'first_defense')
-
-
-lose_stamina = Defense_question(
-    'lose_stamina', 
-    get_text_from('./questions_text/lose_stamina.txt'))
-lose_stamina.add_options_dict({'Далее': None})
-
-
 type_of_attack = Defense_question(
     'd_type_of_attack', 
     get_text_from('./questions_text/type_of_attack_for_defense.txt'),
     field_name = 'type_of_attack')
-
-
-ranged_weapon = Defense_question(
-    'd_ranged_weapon', 
-    get_text_from('./questions_text/ranged_weapon_for_defense.txt'),
-    field_name = 'ranged_weapon')
-ranged_weapon.add_options_dict(
-    {'Метательное': None,
-     'Лук/Арбалет':None})
-
-
-hold_shield = Defense_question(
-    'hold_shield', 
-    get_text_from('./questions_text/hold_shield.txt'))
 
 
 type_of_defense_1 = Defense_question(
@@ -40,26 +14,19 @@ type_of_defense_1 = Defense_question(
 
 type_of_defense_2 = Defense_question(
     'type_of_defense_2', 
-    get_text_from('./questions_text/type_of_defense.txt'), 
-    field_name = 'type_of_defense',
-    column_name = 'ranged_weapon', 
-    required_value = 'Метательное')
+    get_text_from('./questions_text/type_of_defense_2.txt'), 
+    field_name = 'type_of_defense')
+
+attack_weapon = Defense_question(
+    'attack_weapon', 
+    get_text_from('./questions_text/attack_weapon.txt'))
+attack_weapon.add_options_dict(
+    {'Наносит урон': None,
+     'Накладывает эффект': None})
 
 type_of_defense_3 = Defense_question(
     'type_of_defense_3', 
-    get_text_from('./questions_text/type_of_defense.txt'), 
-    field_name = 'type_of_defense')
-
-type_of_defense_4 = Defense_question(
-    'type_of_defense_4', 
-    get_text_from('./questions_text/type_of_defense.txt'), 
-    field_name = 'type_of_defense',
-    column_name = 'ranged_weapon', 
-    required_value = 'Метательное')
-
-type_of_defense_5 = Defense_question(
-    'type_of_defense_5', 
-    get_text_from('./questions_text/type_of_defense.txt'), 
+    get_text_from('./questions_text/type_of_defense_3.txt'), 
     field_name = 'type_of_defense')
 
 
@@ -115,17 +82,9 @@ d_mod = Defense_question(
 d_mod.add_options_dict(
     {'-2 Я сбит(а) с ног':None})
 
-
-d_effects = Defense_question(
-    'd_effects', 
-    get_text_from('./questions_text/effects.txt'), 
-    keyboard_type = Defense_question.multiple_answer)
-d_effects.add_options_dict(
-    {'-1 Замораживание':None,
-     '-2 Ошеломление':None,
-     '-2 Опьянение':None,
-     '-3 Слепота':None})
-
+defense_failed = Defense_question(
+    'defense_failed', 
+    get_text_from('./questions_text/defense_failed.txt'))
 
 def text_for_is_attack_more(session_id):
     session = DB.get_defense_session(session_id)
@@ -141,10 +100,15 @@ def text_for_is_attack_more(session_id):
         parameter = 'Реакция'
         defense_weapon =''
         skill = 'Уклонение/Изворотливость'
-    elif type_of_defense == 'Изменение позиции':
+    elif (type_of_defense == 'Изменение позиции'
+          or type_of_defense == 'Уклонение[Атлетика]'):
         parameter = 'Ловкость'
-        defense_weapon =''
+        defense_weapon = ''
         skill = 'Атлетика'
+    elif type_of_defense == 'Сопротивление магии':
+        parameter = 'Воля'
+        defense_weapon =''
+        skill = 'Сопротивление магии'
     else:
         parameter = 'Реакция'
         weapon = session['defense_weapon']
@@ -161,12 +125,6 @@ def text_for_is_attack_more(session_id):
     list_of_mod_rows = DB.get_selected_options_from_defense(session_id, 'd_mod')
     if list_of_mod_rows:
         for row in list_of_mod_rows:
-            list_of_modifiers.append(row['value'])
-    
-    list_of_effects_rows = DB.get_selected_options_from_defense(
-        session_id, 'd_effects')
-    if list_of_effects_rows:
-        for row in list_of_effects_rows:
             list_of_modifiers.append(row['value'])
     
     modifier_names = '\n'.join(list_of_modifiers)
@@ -187,16 +145,23 @@ def text_for_is_attack_more(session_id):
 {modifier_names}
 ℹ Сумма модификаторов: {plus}{modifier}
 
-➡ Рассчитайте защиту по формуле:
+➡ <b>Рассчитайте защиту по формуле:</b>
 Бросок D10 
 + {parameter} 
 + Навык: {skill}
 {plus}{modifier}
 
 💬 Назовите значение вашей защиты противнику 
-➡ Атака противника больше  вашей защиты? Если да, то на сколько?
+➡ <b>Атака противника больше  вашей защиты?</b> Если да, то на сколько?
     '''
     return text
+
+is_attack_more_1 = Defense_question(
+    'd_is_attack_more_1', 
+    text = text_for_is_attack_more,
+    column_name = 'attack_weapon', 
+    required_value = 'Накладывает эффект',
+    field_name='is_attack_more')
 
 is_attack_more = Defense_question(
     'd_is_attack_more', 
@@ -209,11 +174,11 @@ def text_for_attack_failed(session_id):
     
     type_of_defense = session['type_of_defense'] 
     if type_of_defense == '+0 Блокирование':
-        text = '🛡 Вы отразил атаку.\n\n➡ Орудие, которым персонаж отразил атаку получает 1 урон'
+        text = '🛡 Вы отразили атаку.\n\n➡ Орудие, которым персонаж отразил атаку получает 1 урон'
     elif type_of_defense in ['-3 Парирование','-5 Парирование']:
-        text = '🛡 Вы отразил атаку.\n💬 Ваш противник Ошеломлен'
+        text = '🛡 Вы отразили атаку.\n💬 Ваш противник Ошеломлен'
     else:
-        text = 'Вы отразил атаку'
+        text = '🛡 Вы отразили атаку'
     return text
 
 attack_failed = Defense_question(
@@ -236,7 +201,7 @@ def text_for_armor(session_id):
     session = DB.get_defense_session(session_id)
     place_dict = {'Голова': 'голове',
                   'Туловище': 'туловище',
-                  'Рука':'туловище',
+                  'Рука':'туловище (рука)',
                   'Нога':'ногах'}
     place = session['place'] 
     place_word = place_dict[place]
@@ -255,11 +220,12 @@ armor = Defense_question(
 
 def skript_for_damage_hit(session_id):
     session = DB.get_defense_session(session_id)
-    additional_damage_dict = {'Да': 0,
-                              'Да, на 7-9':3,
-                              'Да, на 10-12':5,
-                              'Да, на 13-14':8,
-                              'Да, на 15 или больше':10}
+    additional_damage_dict = {
+        'Да': 0,
+        'Да, на 7-9':3,
+        'Да, на 10-12':5,
+        'Да, на 13-14':8,
+        'Да, на 15 или больше':10}
     additional_damage = additional_damage_dict[session['is_attack_more']]
     damage_hit = session['damage_hit']
     armor = session['armor']
@@ -295,34 +261,38 @@ resistance_or.add_options_dict(
 def text_for_damage_hurt(session_id):
     session = DB.get_defense_session(session_id)
     
-    place_dict = {'Голова': 'голове',
-                  'Туловище': 'туловище',
-                  'Рука':'туловище',
-                  'Нога':'ногах'}
+    place_dict = {
+        'Голова': 'голове',
+        'Туловище': 'туловище',
+        'Рука':'туловище',
+        'Нога':'ногах'}
     place = session['place'] 
     place_word = place_dict[place]
     armor = session['armor']
     
-    additional_damage_dict = {'Да': 0,
-                              'Да, на 7-9':3,
-                              'Да, на 10-12':5,
-                              'Да, на 13-14':8,
-                              'Да, на 15 или больше':10}
+    additional_damage_dict = {
+        'Да': 0,
+        'Да, на 7-9':3,
+        'Да, на 10-12':5,
+        'Да, на 13-14':8,
+        'Да, на 15 или больше':10}
     additional_damage = additional_damage_dict[session['is_attack_more']]
     damage_hit = session['damage_hit']
     armor = session['armor']
     damage_pierced = session['damage_pierced'] 
     
-    modifier_place_dict = {'Голова': 3,
-                           'Туловище': 1,
-                           'Рука': 0.5,
-                           'Нога': 0.5}
+    modifier_place_dict = {
+        'Голова': 3,
+        'Туловище': 1,
+        'Рука': 0.5,
+        'Нога': 0.5}
     
     modifier_place = modifier_place_dict[place]
     
-    resistance_or_dict = {'х1/2 Сопротивление': 0.5,
-                          'х2 Восприимчивость': 2,
-                          'Нет': 1}
+    resistance_or_dict = {
+        'х1/2 Сопротивление': 0.5,
+        'х2 Восприимчивость': 2,
+        'Нет': 1}
     resistance_or_field = session['resistance_or']
     modifier_resistance_or = resistance_or_dict[resistance_or_field]
     if resistance_or_field != 'Нет':
@@ -356,16 +326,16 @@ def text_for_damage_hurt(session_id):
     
     text = f'''
 ℹ Место попадания: {place}
-ℹ Прочность брони на {place_word}: {armor}
 
 ℹ Расчет урона:
 Исходный урон: {damage_hit - additional_damage} + {additional_damage}доп.урона
+Прочность брони на {place_word}: {armor}
 Урона преодолело броню: {damage_pierced}
 Модификатор места: x{modifier_place}
 {text_modifier_resistance_or} 
 ℹ Получено урона: {result_damage}
 {crit}
-➡ Учтите полученный урон {hurt} 
+➡ <b>Учтите полученный урон</b> {hurt} 
 ➡ Снизьте прочность брони на 1. 
     '''
     return text
@@ -382,29 +352,19 @@ damage_hurt = Defense_question(
 
 '''Defense tree----------------------------------------------------------------------------'''
 
-first_defense.add_options_dict(
-    {'Да': type_of_attack, 
-     'Нет, буду защищаться[-1Вын]': lose_stamina})
-
-lose_stamina.next_question = type_of_attack
-
 type_of_attack.add_options_dict(
     {'Ближний бой': type_of_defense_1, 
-     'Дистанционная': ranged_weapon})
+     'Дистанционная': type_of_defense_2,
+     'Магия': attack_weapon})
 
-ranged_weapon.next_question = hold_shield 
-
-hold_shield.add_options_dict(
-    {'Да': type_of_defense_2,
-     'Нет':type_of_defense_4})
+attack_weapon.next_question = type_of_defense_3
 
 type_of_defense_1.add_options_dict(
     {'+0 Уклонение/Изворот': opponents,
-     '+0 Изменение позиции':opponents,
-     '+0 Блокирование':defense_weapon_2,
+     '+0 Изменение позиции': opponents,
+     '+0 Блокирование': defense_weapon_2,
      '-3 Парирование': defense_weapon_1})
 
-type_of_defense_2.next_question = type_of_defense_3
 type_of_defense_2.add_options_dict(
     {'+0 Уклонение/Изворот': opponents,
      '+0 Изменение позиции':opponents,
@@ -413,18 +373,10 @@ type_of_defense_2.add_options_dict(
 
 type_of_defense_3.add_options_dict(
     {'+0 Уклонение/Изворот': opponents,
-     '+0 Изменение позиции':opponents,
-     '+0 Блокирование':defense_weapon_2})
+     '+0 Уклонение[Атлетика]':opponents,
+     '+0 Блокирование':defense_weapon_2,
+     'Нет защиты': defense_failed})
 
-type_of_defense_4.next_question = type_of_defense_5
-type_of_defense_4.add_options_dict(
-    {'+0 Уклонение/Изворот': opponents,
-     '+0 Изменение позиции':opponents,
-     '-5 Парирование':defense_weapon_1})
-
-type_of_defense_5.add_options_dict(
-    {'+0 Уклонение/Изворот': opponents,
-     '+0 Изменение позиции': opponents })
 
 defense_weapon_1.next_question = opponents
 defense_weapon_2.next_question = defense_weapon_3
@@ -432,9 +384,12 @@ defense_weapon_3.next_question = opponents
 
 opponents.next_question = d_mod
 
-d_mod.next_question = d_effects
+d_mod.next_question = is_attack_more_1
 
-d_effects.next_question = is_attack_more
+is_attack_more_1.next_question = is_attack_more
+is_attack_more_1.add_options_dict(
+    {'Нет': attack_failed,
+     'Да': defense_failed})
 
 is_attack_more.add_options_dict(
     {'Нет': attack_failed,
