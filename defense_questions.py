@@ -80,7 +80,12 @@ d_mod = Defense_question(
     get_text_from('./questions_text/mod.txt'), 
     keyboard_type = Defense_question.multiple_answer)
 d_mod.add_options_dict(
-    {'-2 Я сбит(а) с ног':None})
+    {'-2 Я сбит(а) с ног':None,
+     '+1  Другой модификатор':None,
+     '+2  Другой модификатор':None,
+     '+3  Другой модификатор':None,
+     '-1  Другой модификатор':None,
+     '-2  Другой модификатор':None })
 
 defense_failed = Defense_question(
     'defense_failed', 
@@ -89,11 +94,12 @@ defense_failed = Defense_question(
 def text_for_is_attack_more(session_id):
     session = DB.get_defense_session(session_id)
     
-    skill_dict = {'Меч': 'Владение мечом',
-                  'Легкий клинок': 'Владение легкими клинками',
-                  'Древковое оружие': 'Владение древковым оружием',
-                  'Щит': 'Ближний бой',
-                  'Рука/Нога': 'Борьба' }
+    skill_dict = {
+        'Меч': 'Владение мечом',
+        'Легкий клинок': 'Владение легкими клинками',
+        'Древковое оружие': 'Владение древковым оружием',
+        'Щит': 'Ближний бой',
+        'Рука/Нога': 'Борьба' }
     
     type_of_defense = session['type_of_defense'][3:] 
     if type_of_defense == 'Уклонение/Изворот':

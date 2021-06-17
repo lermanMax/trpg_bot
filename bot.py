@@ -322,8 +322,11 @@ async def new_text_message(message: types.Message):
             user_row = DB.get_user(message.from_user.id)
             user_row = [str(x)for x in user_row]
             text = '\n'.join(user_row)
-            await bot.send_message(_id, text + message.text)
-        await message.reply('Информация будет передана разработчикам. Спасибо!')
+            await bot.send_message(_id, text +'\n' +message.text)
+        keyboard = await get_basemenu_keyboard()
+        await message.reply(
+            'Информация будет передана разработчикам. Спасибо!',
+            reply_markup = keyboard)
     
     
     
@@ -332,7 +335,10 @@ async def new_text_message(message: types.Message):
 async def staf(message: types.Message):
     """ любой другой контент просто отметаем"""
     logging.info('strange staf from: %r', message.from_user.id)
-    await message.reply(get_text_from('./questions_text/wtf.txt'))
+    keyboard = await get_basemenu_keyboard()
+    await message.reply(
+        get_text_from('./questions_text/wtf.txt'),
+        reply_markup = keyboard)
 
 
 
