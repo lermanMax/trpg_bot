@@ -379,7 +379,7 @@ type_of_defense_2.add_options_dict(
 
 type_of_defense_3.add_options_dict(
     {'+0 Уклонение/Изворот': opponents,
-     '+0 Уклонение[Атлетика]':opponents,
+     '+0 Уклон.[Атлетика]':opponents,
      '+0 Блокирование':defense_weapon_2,
      'Нет защиты': defense_failed})
 
