@@ -107,7 +107,7 @@ def text_for_is_attack_more(session_id):
         defense_weapon =''
         skill = 'Уклонение/Изворотливость'
     elif (type_of_defense == 'Изменение позиции'
-          or type_of_defense == 'Уклонение[Атлетика]'):
+          or type_of_defense == 'Уклон.[Атлетика]'):
         parameter = 'Ловкость'
         defense_weapon = ''
         skill = 'Атлетика'
